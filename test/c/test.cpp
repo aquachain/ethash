@@ -1,15 +1,15 @@
 #include <iomanip>
-#include <libethash/fnv.h>
-#include <libethash/ethash.h>
-#include <libethash/internal.h>
-#include <libethash/io.h>
+#include <libaquahash/fnv.h>
+#include <libaquahash/aquahash.h>
+#include <libaquahash/internal.h>
+#include <libaquahash/io.h>
 
 #ifdef WITH_CRYPTOPP
 
-#include <libethash/sha3_cryptopp.h>
+#include <libaquahash/sha3_cryptopp.h>
 
 #else
-#include <libethash/sha3.h>
+#include <libaquahash/sha3.h>
 #endif // WITH_CRYPTOPP
 
 #ifdef _WIN32
@@ -47,7 +47,7 @@ std::string bytesToHexString(const uint8_t *str, const uint64_t s)
 	return ret.str();
 }
 
-std::string blockhashToHexString(ethash_h256_t* _hash)
+std::string blockhashToHexString(aquahash_h256_t* _hash)
 {
 	return bytesToHexString((uint8_t*)_hash, 32);
 }
@@ -91,9 +91,9 @@ bytes hexStringToBytes(std::string const& _s)
 	return ret;
 }
 
-ethash_h256_t stringToBlockhash(std::string const& _s)
+aquahash_h256_t stringToBlockhash(std::string const& _s)
 {
-	ethash_h256_t ret;
+	aquahash_h256_t ret;
 	bytes b = hexStringToBytes(_s);
 	memcpy(&ret, b.data(), b.size());
 	return ret;
@@ -116,8 +116,8 @@ BOOST_AUTO_TEST_CASE(fnv_hash_check) {
 }
 
 BOOST_AUTO_TEST_CASE(SHA256_check) {
-	ethash_h256_t input;
-	ethash_h256_t out;
+	aquahash_h256_t input;
+	aquahash_h256_t out;
 	memcpy(&input, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 	SHA3_256(&out, (uint8_t*)&input, 32);
 	const std::string
@@ -142,33 +142,33 @@ BOOST_AUTO_TEST_CASE(SHA512_check) {
 
 BOOST_AUTO_TEST_CASE(test_swap_endian32) {
 	uint32_t v32 = (uint32_t)0xBAADF00D;
-	v32 = ethash_swap_u32(v32);
+	v32 = aquahash_swap_u32(v32);
 	BOOST_REQUIRE_EQUAL(v32, (uint32_t)0x0DF0ADBA);
 }
 
 BOOST_AUTO_TEST_CASE(test_swap_endian64) {
 	uint64_t v64 = (uint64_t)0xFEE1DEADDEADBEEF;
-	v64 = ethash_swap_u64(v64);
+	v64 = aquahash_swap_u64(v64);
 	BOOST_REQUIRE_EQUAL(v64, (uint64_t)0xEFBEADDEADDEE1FE);
 }
 
-BOOST_AUTO_TEST_CASE(ethash_params_init_genesis_check) {
-	uint64_t full_size = ethash_get_datasize(0);
-	uint64_t cache_size = ethash_get_cachesize(0);
-	BOOST_REQUIRE_MESSAGE(full_size < ETHASH_DATASET_BYTES_INIT,
+BOOST_AUTO_TEST_CASE(aquahash_params_init_genesis_check) {
+	uint64_t full_size = aquahash_get_datasize(0);
+	uint64_t cache_size = aquahash_get_cachesize(0);
+	BOOST_REQUIRE_MESSAGE(full_size < AQUAHASH_DATASET_BYTES_INIT,
 			"\nfull size: " << full_size << "\n"
-					<< "should be less than or equal to: " << ETHASH_DATASET_BYTES_INIT << "\n");
-	BOOST_REQUIRE_MESSAGE(full_size + 20 * ETHASH_MIX_BYTES >= ETHASH_DATASET_BYTES_INIT,
-			"\nfull size + 20*MIX_BYTES: " << full_size + 20 * ETHASH_MIX_BYTES << "\n"
-					<< "should be greater than or equal to: " << ETHASH_DATASET_BYTES_INIT << "\n");
-	BOOST_REQUIRE_MESSAGE(cache_size < ETHASH_DATASET_BYTES_INIT / 32,
+					<< "should be less than or equal to: " << AQUAHASH_DATASET_BYTES_INIT << "\n");
+	BOOST_REQUIRE_MESSAGE(full_size + 20 * AQUAHASH_MIX_BYTES >= AQUAHASH_DATASET_BYTES_INIT,
+			"\nfull size + 20*MIX_BYTES: " << full_size + 20 * AQUAHASH_MIX_BYTES << "\n"
+					<< "should be greater than or equal to: " << AQUAHASH_DATASET_BYTES_INIT << "\n");
+	BOOST_REQUIRE_MESSAGE(cache_size < AQUAHASH_DATASET_BYTES_INIT / 32,
 			"\ncache size: " << cache_size << "\n"
-					<< "should be less than or equal to: " << ETHASH_DATASET_BYTES_INIT / 32 << "\n");
+					<< "should be less than or equal to: " << AQUAHASH_DATASET_BYTES_INIT / 32 << "\n");
 }
 
-BOOST_AUTO_TEST_CASE(ethash_params_init_genesis_calcifide_check) {
-	uint64_t full_size = ethash_get_datasize(0);
-	uint64_t cache_size = ethash_get_cachesize(0);
+BOOST_AUTO_TEST_CASE(aquahash_params_init_genesis_calcifide_check) {
+	uint64_t full_size = aquahash_get_datasize(0);
+	uint64_t cache_size = aquahash_get_cachesize(0);
 	const uint32_t expected_full_size = 1073739904;
 	const uint32_t expected_cache_size = 16776896;
 	BOOST_REQUIRE_MESSAGE(full_size == expected_full_size,
@@ -179,61 +179,61 @@ BOOST_AUTO_TEST_CASE(ethash_params_init_genesis_calcifide_check) {
 					<< "actual: " << cache_size << "\n");
 }
 
-BOOST_AUTO_TEST_CASE(ethash_check_difficulty_check) {
-	ethash_h256_t hash;
-	ethash_h256_t target;
+BOOST_AUTO_TEST_CASE(aquahash_check_difficulty_check) {
+	aquahash_h256_t hash;
+	aquahash_h256_t target;
 	memcpy(&hash, "11111111111111111111111111111111", 32);
 	memcpy(&target, "22222222222222222222222222222222", 32);
 	BOOST_REQUIRE_MESSAGE(
-			ethash_check_difficulty(&hash, &target),
+			aquahash_check_difficulty(&hash, &target),
 			"\nexpected \"" << std::string((char *) &hash, 32).c_str() << "\" to have the same or less difficulty than \"" << std::string((char *) &target, 32).c_str() << "\"\n");
 	BOOST_REQUIRE_MESSAGE(
-		ethash_check_difficulty(&hash, &hash), "");
+		aquahash_check_difficulty(&hash, &hash), "");
 			// "\nexpected \"" << hash << "\" to have the same or less difficulty than \"" << hash << "\"\n");
 	memcpy(&target, "11111111111111111111111111111112", 32);
 	BOOST_REQUIRE_MESSAGE(
-		ethash_check_difficulty(&hash, &target), "");
+		aquahash_check_difficulty(&hash, &target), "");
 			// "\nexpected \"" << hash << "\" to have the same or less difficulty than \"" << target << "\"\n");
 	memcpy(&target, "11111111111111111111111111111110", 32);
 	BOOST_REQUIRE_MESSAGE(
-			!ethash_check_difficulty(&hash, &target), "");
+			!aquahash_check_difficulty(&hash, &target), "");
 			// "\nexpected \"" << hash << "\" to have more difficulty than \"" << target << "\"\n");
 }
 
-BOOST_AUTO_TEST_CASE(test_ethash_io_mutable_name) {
+BOOST_AUTO_TEST_CASE(test_aquahash_io_mutable_name) {
 	char mutable_name[DAG_MUTABLE_NAME_MAX_SIZE];
 	// should have at least 8 bytes provided since this is what we test :)
-	ethash_h256_t seed1 = ethash_h256_static_init(0, 10, 65, 255, 34, 55, 22, 8);
-	ethash_io_mutable_name(1, &seed1, mutable_name);
+	aquahash_h256_t seed1 = aquahash_h256_static_init(0, 10, 65, 255, 34, 55, 22, 8);
+	aquahash_io_mutable_name(1, &seed1, mutable_name);
 	BOOST_REQUIRE_EQUAL(0, strcmp(mutable_name, "full-R1-000a41ff22371608"));
-	ethash_h256_t seed2 = ethash_h256_static_init(0, 0, 0, 0, 0, 0, 0, 0);
-	ethash_io_mutable_name(44, &seed2, mutable_name);
+	aquahash_h256_t seed2 = aquahash_h256_static_init(0, 0, 0, 0, 0, 0, 0, 0);
+	aquahash_io_mutable_name(44, &seed2, mutable_name);
 	BOOST_REQUIRE_EQUAL(0, strcmp(mutable_name, "full-R44-0000000000000000"));
 }
 
-BOOST_AUTO_TEST_CASE(test_ethash_dir_creation) {
-	ethash_h256_t seedhash;
+BOOST_AUTO_TEST_CASE(test_aquahash_dir_creation) {
+	aquahash_h256_t seedhash;
 	FILE *f = NULL;
 	memset(&seedhash, 0, 32);
 	BOOST_REQUIRE_EQUAL(
-		ETHASH_IO_MEMO_MISMATCH,
-		ethash_io_prepare("./test_ethash_directory/", seedhash, &f, 64, false)
+		AQUAHASH_IO_MEMO_MISMATCH,
+		aquahash_io_prepare("./test_aquahash_directory/", seedhash, &f, 64, false)
 	);
 	BOOST_REQUIRE(f);
 
 	// let's make sure that the directory was created
-	BOOST_REQUIRE(fs::is_directory(fs::path("./test_ethash_directory/")));
+	BOOST_REQUIRE(fs::is_directory(fs::path("./test_aquahash_directory/")));
 
 	// cleanup
 	fclose(f);
-	fs::remove_all("./test_ethash_directory/");
+	fs::remove_all("./test_aquahash_directory/");
 }
 
-BOOST_AUTO_TEST_CASE(test_ethash_io_memo_file_match) {
+BOOST_AUTO_TEST_CASE(test_aquahash_io_memo_file_match) {
 	uint64_t full_size;
 	uint64_t cache_size;
-	ethash_h256_t seed;
-	ethash_h256_t hash;
+	aquahash_h256_t seed;
+	aquahash_h256_t hash;
 	FILE* f;
 	memcpy(&seed, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 	memcpy(&hash, "~~~X~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
@@ -241,9 +241,9 @@ BOOST_AUTO_TEST_CASE(test_ethash_io_memo_file_match) {
 	cache_size = 1024;
 	full_size = 1024 * 32;
 
-	ethash_light_t light = ethash_light_new_internal(cache_size, &seed);
-	ethash_full_t full = ethash_full_new_internal(
-		"./test_ethash_directory/",
+	aquahash_light_t light = aquahash_light_new_internal(cache_size, &seed);
+	aquahash_full_t full = aquahash_full_new_internal(
+		"./test_aquahash_directory/",
 		seed,
 		full_size,
 		light,
@@ -251,58 +251,58 @@ BOOST_AUTO_TEST_CASE(test_ethash_io_memo_file_match) {
 	);
 	BOOST_ASSERT(full);
 	// let's make sure that the directory was created
-	BOOST_REQUIRE(fs::is_directory(fs::path("./test_ethash_directory/")));
+	BOOST_REQUIRE(fs::is_directory(fs::path("./test_aquahash_directory/")));
 	// delete the full here so that memory is properly unmapped and FILE handler freed
-	ethash_full_delete(full);
+	aquahash_full_delete(full);
 	// and check that we have a match when checking again
 	BOOST_REQUIRE_EQUAL(
-		ETHASH_IO_MEMO_MATCH,
-		ethash_io_prepare("./test_ethash_directory/", seed, &f, full_size, false)
+		AQUAHASH_IO_MEMO_MATCH,
+		aquahash_io_prepare("./test_aquahash_directory/", seed, &f, full_size, false)
 	);
 	BOOST_REQUIRE(f);
 
 	// cleanup
 	fclose(f);
-	ethash_light_delete(light);
-	fs::remove_all("./test_ethash_directory/");
+	aquahash_light_delete(light);
+	fs::remove_all("./test_aquahash_directory/");
 }
 
-BOOST_AUTO_TEST_CASE(test_ethash_io_memo_file_size_mismatch) {
+BOOST_AUTO_TEST_CASE(test_aquahash_io_memo_file_size_mismatch) {
 	static const int blockn = 0;
-	ethash_h256_t seedhash = ethash_get_seedhash(blockn);
+	aquahash_h256_t seedhash = aquahash_get_seedhash(blockn);
 	FILE *f = NULL;
 	BOOST_REQUIRE_EQUAL(
-		ETHASH_IO_MEMO_MISMATCH,
-		ethash_io_prepare("./test_ethash_directory/", seedhash, &f, 64, false)
+		AQUAHASH_IO_MEMO_MISMATCH,
+		aquahash_io_prepare("./test_aquahash_directory/", seedhash, &f, 64, false)
 	);
 	BOOST_REQUIRE(f);
 	fclose(f);
 
 	// let's make sure that the directory was created
-	BOOST_REQUIRE(fs::is_directory(fs::path("./test_ethash_directory/")));
+	BOOST_REQUIRE(fs::is_directory(fs::path("./test_aquahash_directory/")));
 	// and check that we get the size mismatch detected if we request diffferent size
 	BOOST_REQUIRE_EQUAL(
-		ETHASH_IO_MEMO_SIZE_MISMATCH,
-		ethash_io_prepare("./test_ethash_directory/", seedhash, &f, 65, false)
+		AQUAHASH_IO_MEMO_SIZE_MISMATCH,
+		aquahash_io_prepare("./test_aquahash_directory/", seedhash, &f, 65, false)
 	);
 
 	// cleanup
-	fs::remove_all("./test_ethash_directory/");
+	fs::remove_all("./test_aquahash_directory/");
 }
 
-BOOST_AUTO_TEST_CASE(test_ethash_get_default_dirname) {
+BOOST_AUTO_TEST_CASE(test_aquahash_get_default_dirname) {
 	char result[256];
 	// this is really not an easy thing to test for in a unit test
 	// TODO: Improve this test ...
 #ifdef _WIN32
 	char homedir[256];
 	BOOST_REQUIRE(SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PROFILE, NULL, 0, (CHAR*)homedir)));
-	BOOST_REQUIRE(ethash_get_default_dirname(result, 256));
-	std::string res = std::string(homedir) + std::string("\\AppData\\Local\\Ethash\\");
+	BOOST_REQUIRE(aquahash_get_default_dirname(result, 256));
+	std::string res = std::string(homedir) + std::string("\\AppData\\Local\\Aquahash\\");
 #else
 	char* homedir = getenv("HOME");
-	BOOST_REQUIRE(ethash_get_default_dirname(result, 256));
-	std::string res = std::string(homedir) + std::string("/.ethash/");
+	BOOST_REQUIRE(aquahash_get_default_dirname(result, 256));
+	std::string res = std::string(homedir) + std::string("/.aquahash/");
 #endif
 	BOOST_CHECK_MESSAGE(strcmp(res.c_str(), result) == 0,
 		"Expected \"" + res + "\" but got \"" + std::string(result) +  "\""
@@ -312,26 +312,26 @@ BOOST_AUTO_TEST_CASE(test_ethash_get_default_dirname) {
 BOOST_AUTO_TEST_CASE(light_and_full_client_checks) {
 	uint64_t full_size;
 	uint64_t cache_size;
-	ethash_h256_t seed;
-	ethash_h256_t hash;
-	ethash_h256_t difficulty;
-	ethash_return_value_t light_out;
-	ethash_return_value_t full_out;
+	aquahash_h256_t seed;
+	aquahash_h256_t hash;
+	aquahash_h256_t difficulty;
+	aquahash_return_value_t light_out;
+	aquahash_return_value_t full_out;
 	memcpy(&seed, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 	memcpy(&hash, "~~~X~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 
 	// Set the difficulty
-	ethash_h256_set(&difficulty, 0, 197);
-	ethash_h256_set(&difficulty, 1, 90);
+	aquahash_h256_set(&difficulty, 0, 197);
+	aquahash_h256_set(&difficulty, 1, 90);
 	for (int i = 2; i < 32; i++)
-		ethash_h256_set(&difficulty, i, 255);
+		aquahash_h256_set(&difficulty, i, 255);
 
 	cache_size = 1024;
 	full_size = 1024 * 32;
 
-	ethash_light_t light = ethash_light_new_internal(cache_size, &seed);
-	ethash_full_t full = ethash_full_new_internal(
-		"./test_ethash_directory/",
+	aquahash_light_t light = aquahash_light_new_internal(cache_size, &seed);
+	aquahash_full_t full = aquahash_full_new_internal(
+		"./test_aquahash_directory/",
 		seed,
 		full_size,
 		light,
@@ -349,7 +349,7 @@ BOOST_AUTO_TEST_CASE(light_and_full_client_checks) {
 	}
 	{
 		node node;
-		ethash_calculate_dag_item(&node, 0, light);
+		aquahash_calculate_dag_item(&node, 0, light);
 		const std::string
 				actual = bytesToHexString((uint8_t const *) &node, sizeof(node)),
 				expected = "b1698f829f90b35455804e5185d78f549fcb1bdce2bee006d4d7e68eb154b596be1427769eb1c3c3e93180c760af75f81d1023da6a0ffbe321c153a7c0103597";
@@ -361,7 +361,7 @@ BOOST_AUTO_TEST_CASE(light_and_full_client_checks) {
 		for (int i = 0; i < full_size / sizeof(node); ++i) {
 			for (uint32_t j = 0; j < 32; ++j) {
 				node expected_node;
-				ethash_calculate_dag_item(&expected_node, j, light);
+				aquahash_calculate_dag_item(&expected_node, j, light);
 				const std::string
 						actual = bytesToHexString((uint8_t const *) &(full->data[j]), sizeof(node)),
 						expected = bytesToHexString((uint8_t const *) &expected_node, sizeof(node));
@@ -374,9 +374,9 @@ BOOST_AUTO_TEST_CASE(light_and_full_client_checks) {
 	}
 	{
 		uint64_t nonce = 0x7c7c597c;
-		full_out = ethash_full_compute(full, hash, nonce);
+		full_out = aquahash_full_compute(full, hash, nonce);
 		BOOST_REQUIRE(full_out.success);
-		light_out = ethash_light_compute_internal(light, full_size, hash, nonce);
+		light_out = aquahash_light_compute_internal(light, full_size, hash, nonce);
 		BOOST_REQUIRE(light_out.success);
 		const std::string
 				light_result_string = blockhashToHexString(&light_out.result),
@@ -390,15 +390,15 @@ BOOST_AUTO_TEST_CASE(light_and_full_client_checks) {
 		BOOST_REQUIRE_MESSAGE(full_mix_hash_string == light_mix_hash_string,
 				"\nlight mix hash: " << light_mix_hash_string.c_str() << "\n"
 						<< "full mix hash: " << full_mix_hash_string.c_str() << "\n");
-		ethash_h256_t check_hash;
-		ethash_quick_hash(&check_hash, &hash, nonce, &full_out.mix_hash);
+		aquahash_h256_t check_hash;
+		aquahash_quick_hash(&check_hash, &hash, nonce, &full_out.mix_hash);
 		const std::string check_hash_string = blockhashToHexString(&check_hash);
 		BOOST_REQUIRE_MESSAGE(check_hash_string == full_result_string,
 				"\ncheck hash string: " << check_hash_string.c_str() << "\n"
 						<< "full result: " << full_result_string.c_str() << "\n");
 	}
 	{
-		full_out = ethash_full_compute(full, hash, 5);
+		full_out = aquahash_full_compute(full, hash, 5);
 		BOOST_REQUIRE(full_out.success);
 		std::string
 				light_result_string = blockhashToHexString(&light_out.result),
@@ -406,7 +406,7 @@ BOOST_AUTO_TEST_CASE(light_and_full_client_checks) {
 		BOOST_REQUIRE_MESSAGE(light_result_string != full_result_string,
 				"\nlight result and full result should differ: " << light_result_string.c_str() << "\n");
 
-		light_out = ethash_light_compute_internal(light, full_size, hash, 5);
+		light_out = aquahash_light_compute_internal(light, full_size, hash, 5);
 		BOOST_REQUIRE(light_out.success);
 		light_result_string = blockhashToHexString(&light_out.result);
 		BOOST_REQUIRE_MESSAGE(light_result_string == full_result_string,
@@ -419,25 +419,25 @@ BOOST_AUTO_TEST_CASE(light_and_full_client_checks) {
 		BOOST_REQUIRE_MESSAGE(full_mix_hash_string == light_mix_hash_string,
 				"\nlight mix hash: " << light_mix_hash_string.c_str() << "\n"
 						<< "full mix hash: " << full_mix_hash_string.c_str() << "\n");
-		BOOST_REQUIRE_MESSAGE(ethash_check_difficulty(&full_out.result, &difficulty),
-				"ethash_check_difficulty failed"
+		BOOST_REQUIRE_MESSAGE(aquahash_check_difficulty(&full_out.result, &difficulty),
+				"aquahash_check_difficulty failed"
 		);
-		BOOST_REQUIRE_MESSAGE(ethash_quick_check_difficulty(&hash, 5U, &full_out.mix_hash, &difficulty),
-				"ethash_quick_check_difficulty failed"
+		BOOST_REQUIRE_MESSAGE(aquahash_quick_check_difficulty(&hash, 5U, &full_out.mix_hash, &difficulty),
+				"aquahash_quick_check_difficulty failed"
 		);
 	}
-	ethash_light_delete(light);
-	ethash_full_delete(full);
-	fs::remove_all("./test_ethash_directory/");
+	aquahash_light_delete(light);
+	aquahash_full_delete(full);
+	fs::remove_all("./test_aquahash_directory/");
 }
 
-BOOST_AUTO_TEST_CASE(ethash_full_new_when_dag_exists_with_wrong_size) {
+BOOST_AUTO_TEST_CASE(aquahash_full_new_when_dag_exists_with_wrong_size) {
 	uint64_t full_size;
 	uint64_t cache_size;
-	ethash_h256_t seed;
-	ethash_h256_t hash;
-	ethash_return_value_t full_out;
-	ethash_return_value_t light_out;
+	aquahash_h256_t seed;
+	aquahash_h256_t hash;
+	aquahash_return_value_t full_out;
+	aquahash_return_value_t light_out;
 	memcpy(&seed, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 	memcpy(&hash, "~~~X~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 
@@ -447,16 +447,16 @@ BOOST_AUTO_TEST_CASE(ethash_full_new_when_dag_exists_with_wrong_size) {
 	// first make a DAG file of "wrong size"
 	FILE *f;
 	BOOST_REQUIRE_EQUAL(
-		ETHASH_IO_MEMO_MISMATCH,
-		ethash_io_prepare("./test_ethash_directory/", seed, &f, 64, false)
+		AQUAHASH_IO_MEMO_MISMATCH,
+		aquahash_io_prepare("./test_aquahash_directory/", seed, &f, 64, false)
 	);
 	fclose(f);
 
 	// then create new DAG, which should detect the wrong size and force create a new file
-	ethash_light_t light = ethash_light_new_internal(cache_size, &seed);
+	aquahash_light_t light = aquahash_light_new_internal(cache_size, &seed);
 	BOOST_ASSERT(light);
-	ethash_full_t full = ethash_full_new_internal(
-		"./test_ethash_directory/",
+	aquahash_full_t full = aquahash_full_new_internal(
+		"./test_aquahash_directory/",
 		seed,
 		full_size,
 		light,
@@ -465,9 +465,9 @@ BOOST_AUTO_TEST_CASE(ethash_full_new_when_dag_exists_with_wrong_size) {
 	BOOST_ASSERT(full);
 	{
 		uint64_t nonce = 0x7c7c597c;
-		full_out = ethash_full_compute(full, hash, nonce);
+		full_out = aquahash_full_compute(full, hash, nonce);
 		BOOST_REQUIRE(full_out.success);
-		light_out = ethash_light_compute_internal(light, full_size, hash, nonce);
+		light_out = aquahash_light_compute_internal(light, full_size, hash, nonce);
 		BOOST_REQUIRE(light_out.success);
 		const std::string
 				light_result_string = blockhashToHexString(&light_out.result),
@@ -481,17 +481,17 @@ BOOST_AUTO_TEST_CASE(ethash_full_new_when_dag_exists_with_wrong_size) {
 		BOOST_REQUIRE_MESSAGE(full_mix_hash_string == light_mix_hash_string,
 				"\nlight mix hash: " << light_mix_hash_string.c_str() << "\n"
 						<< "full mix hash: " << full_mix_hash_string.c_str() << "\n");
-		ethash_h256_t check_hash;
-		ethash_quick_hash(&check_hash, &hash, nonce, &full_out.mix_hash);
+		aquahash_h256_t check_hash;
+		aquahash_quick_hash(&check_hash, &hash, nonce, &full_out.mix_hash);
 		const std::string check_hash_string = blockhashToHexString(&check_hash);
 		BOOST_REQUIRE_MESSAGE(check_hash_string == full_result_string,
 				"\ncheck hash string: " << check_hash_string.c_str() << "\n"
 						<< "full result: " << full_result_string.c_str() << "\n");
 	}
 
-	ethash_light_delete(light);
-	ethash_full_delete(full);
-	fs::remove_all("./test_ethash_directory/");
+	aquahash_light_delete(light);
+	aquahash_full_delete(full);
+	fs::remove_all("./test_aquahash_directory/");
 }
 
 static bool g_executed = false;
@@ -520,17 +520,17 @@ static int test_full_callback_create_incomplete_dag(unsigned _progress)
 BOOST_AUTO_TEST_CASE(full_client_callback) {
 	uint64_t full_size;
 	uint64_t cache_size;
-	ethash_h256_t seed;
-	ethash_h256_t hash;
+	aquahash_h256_t seed;
+	aquahash_h256_t hash;
 	memcpy(&seed, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 	memcpy(&hash, "~~~X~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 
 	cache_size = 1024;
 	full_size = 1024 * 32;
 
-	ethash_light_t light = ethash_light_new_internal(cache_size, &seed);
-	ethash_full_t full = ethash_full_new_internal(
-		"./test_ethash_directory/",
+	aquahash_light_t light = aquahash_light_new_internal(cache_size, &seed);
+	aquahash_full_t full = aquahash_full_new_internal(
+		"./test_aquahash_directory/",
 		seed,
 		full_size,
 		light,
@@ -540,50 +540,50 @@ BOOST_AUTO_TEST_CASE(full_client_callback) {
 	BOOST_CHECK(g_executed);
 	BOOST_REQUIRE_EQUAL(g_prev_progress, 100);
 
-	ethash_full_delete(full);
-	ethash_light_delete(light);
-	fs::remove_all("./test_ethash_directory/");
+	aquahash_full_delete(full);
+	aquahash_light_delete(light);
+	fs::remove_all("./test_aquahash_directory/");
 }
 
 BOOST_AUTO_TEST_CASE(failing_full_client_callback) {
 	uint64_t full_size;
 	uint64_t cache_size;
-	ethash_h256_t seed;
-	ethash_h256_t hash;
+	aquahash_h256_t seed;
+	aquahash_h256_t hash;
 	memcpy(&seed, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 	memcpy(&hash, "~~~X~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 
 	cache_size = 1024;
 	full_size = 1024 * 32;
 
-	ethash_light_t light = ethash_light_new_internal(cache_size, &seed);
-	ethash_full_t full = ethash_full_new_internal(
-		"./test_ethash_directory/",
+	aquahash_light_t light = aquahash_light_new_internal(cache_size, &seed);
+	aquahash_full_t full = aquahash_full_new_internal(
+		"./test_aquahash_directory/",
 		seed,
 		full_size,
 		light,
 		test_full_callback_that_fails
 	);
 	BOOST_ASSERT(!full);
-	ethash_light_delete(light);
-	fs::remove_all("./test_ethash_directory/");
+	aquahash_light_delete(light);
+	fs::remove_all("./test_aquahash_directory/");
 }
 
 BOOST_AUTO_TEST_CASE(test_incomplete_dag_file) {
 	uint64_t full_size;
 	uint64_t cache_size;
-	ethash_h256_t seed;
-	ethash_h256_t hash;
+	aquahash_h256_t seed;
+	aquahash_h256_t hash;
 	memcpy(&seed, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 	memcpy(&hash, "~~~X~~~~~~~~~~~~~~~~~~~~~~~~~~~~", 32);
 
 	cache_size = 1024;
 	full_size = 1024 * 32;
 
-	ethash_light_t light = ethash_light_new_internal(cache_size, &seed);
+	aquahash_light_t light = aquahash_light_new_internal(cache_size, &seed);
 	// create a full but stop at 30%, so no magic number is written
-	ethash_full_t full = ethash_full_new_internal(
-		"./test_ethash_directory/",
+	aquahash_full_t full = aquahash_full_new_internal(
+		"./test_aquahash_directory/",
 		seed,
 		full_size,
 		light,
@@ -593,60 +593,60 @@ BOOST_AUTO_TEST_CASE(test_incomplete_dag_file) {
 	FILE *f = NULL;
 	// confirm that we get a size_mismatch because the magic number is missing
 	BOOST_REQUIRE_EQUAL(
-		ETHASH_IO_MEMO_SIZE_MISMATCH,
-		ethash_io_prepare("./test_ethash_directory/", seed, &f, full_size, false)
+		AQUAHASH_IO_MEMO_SIZE_MISMATCH,
+		aquahash_io_prepare("./test_aquahash_directory/", seed, &f, full_size, false)
 	);
-	ethash_light_delete(light);
-	fs::remove_all("./test_ethash_directory/");
+	aquahash_light_delete(light);
+	fs::remove_all("./test_aquahash_directory/");
 }
 
 BOOST_AUTO_TEST_CASE(test_block22_verification) {
 	// from POC-9 testnet, epoch 0
-	ethash_light_t light = ethash_light_new(22);
-	ethash_h256_t seedhash = stringToBlockhash("372eca2454ead349c3df0ab5d00b0b706b23e49d469387db91811cee0358fc6d");
+	aquahash_light_t light = aquahash_light_new(22);
+	aquahash_h256_t seedhash = stringToBlockhash("372eca2454ead349c3df0ab5d00b0b706b23e49d469387db91811cee0358fc6d");
 	BOOST_ASSERT(light);
-	ethash_return_value_t ret = ethash_light_compute(
+	aquahash_return_value_t ret = aquahash_light_compute(
 		light,
 		seedhash,
 		0x495732e0ed7a801cU
 	);
 	BOOST_REQUIRE_EQUAL(blockhashToHexString(&ret.result), "00000b184f1fdd88bfd94c86c39e65db0c36144d5e43f745f722196e730cb614");
-	ethash_h256_t difficulty = ethash_h256_static_init(0x2, 0x5, 0x40);
-	BOOST_REQUIRE(ethash_check_difficulty(&ret.result, &difficulty));
-	ethash_light_delete(light);
+	aquahash_h256_t difficulty = aquahash_h256_static_init(0x2, 0x5, 0x40);
+	BOOST_REQUIRE(aquahash_check_difficulty(&ret.result, &difficulty));
+	aquahash_light_delete(light);
 }
 
 BOOST_AUTO_TEST_CASE(test_block30001_verification) {
 	// from POC-9 testnet, epoch 1
-	ethash_light_t light = ethash_light_new(30001);
-	ethash_h256_t seedhash = stringToBlockhash("7e44356ee3441623bc72a683fd3708fdf75e971bbe294f33e539eedad4b92b34");
+	aquahash_light_t light = aquahash_light_new(30001);
+	aquahash_h256_t seedhash = stringToBlockhash("7e44356ee3441623bc72a683fd3708fdf75e971bbe294f33e539eedad4b92b34");
 	BOOST_ASSERT(light);
-	ethash_return_value_t ret = ethash_light_compute(
+	aquahash_return_value_t ret = aquahash_light_compute(
 		light,
 		seedhash,
 		0x318df1c8adef7e5eU
 	);
-	ethash_h256_t difficulty = ethash_h256_static_init(0x17, 0x62, 0xff);
-	BOOST_REQUIRE(ethash_check_difficulty(&ret.result, &difficulty));
-	ethash_light_delete(light);
+	aquahash_h256_t difficulty = aquahash_h256_static_init(0x17, 0x62, 0xff);
+	BOOST_REQUIRE(aquahash_check_difficulty(&ret.result, &difficulty));
+	aquahash_light_delete(light);
 }
 
 BOOST_AUTO_TEST_CASE(test_block60000_verification) {
 	// from POC-9 testnet, epoch 2
-	ethash_light_t light = ethash_light_new(60000);
-	ethash_h256_t seedhash = stringToBlockhash("5fc898f16035bf5ac9c6d9077ae1e3d5fc1ecc3c9fd5bee8bb00e810fdacbaa0");
+	aquahash_light_t light = aquahash_light_new(60000);
+	aquahash_h256_t seedhash = stringToBlockhash("5fc898f16035bf5ac9c6d9077ae1e3d5fc1ecc3c9fd5bee8bb00e810fdacbaa0");
 	BOOST_ASSERT(light);
-	ethash_return_value_t ret = ethash_light_compute(
+	aquahash_return_value_t ret = aquahash_light_compute(
 		light,
 		seedhash,
 		0x50377003e5d830caU
 	);
-	ethash_h256_t difficulty = ethash_h256_static_init(0x25, 0xa6, 0x1e);
-	BOOST_REQUIRE(ethash_check_difficulty(&ret.result, &difficulty));
-	ethash_light_delete(light);
+	aquahash_h256_t difficulty = aquahash_h256_static_init(0x25, 0xa6, 0x1e);
+	BOOST_REQUIRE(aquahash_check_difficulty(&ret.result, &difficulty));
+	aquahash_light_delete(light);
 }
 
-// Test of Full DAG creation with the minimal ethash.h API.
+// Test of Full DAG creation with the minimal aquahash.h API.
 // Commented out since travis tests would take too much time.
 // Uncomment and run on your own machine if you want to confirm
 // it works fine.
@@ -659,11 +659,11 @@ static int progress_cb(unsigned _progress)
 }
 
 BOOST_AUTO_TEST_CASE(full_dag_test) {
-	ethash_light_t light = ethash_light_new(55);
+	aquahash_light_t light = aquahash_light_new(55);
 	BOOST_ASSERT(light);
-	ethash_full_t full = ethash_full_new(light, progress_cb);
+	aquahash_full_t full = aquahash_full_new(light, progress_cb);
 	BOOST_ASSERT(full);
-	ethash_light_delete(light);
-	ethash_full_delete(full);
+	aquahash_light_delete(light);
+	aquahash_full_delete(full);
 }
 #endif

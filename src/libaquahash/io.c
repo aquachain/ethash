@@ -23,27 +23,27 @@
 #include <stdio.h>
 #include <errno.h>
 
-enum ethash_io_rc ethash_io_prepare(
+enum aquahash_io_rc aquahash_io_prepare(
 	char const* dirname,
-	ethash_h256_t const seedhash,
+	aquahash_h256_t const seedhash,
 	FILE** output_file,
 	uint64_t file_size,
 	bool force_create
 )
 {
 	char mutable_name[DAG_MUTABLE_NAME_MAX_SIZE];
-	enum ethash_io_rc ret = AQUAHASH_IO_FAIL;
+	enum aquahash_io_rc ret = AQUAHASH_IO_FAIL;
 	// reset errno before io calls
 	errno = 0;
 
 	// assert directory exists
-	if (!ethash_mkdir(dirname)) {
+	if (!aquahash_mkdir(dirname)) {
 		AQUAHASH_CRITICAL("Could not create the aquahash directory");
 		goto end;
 	}
 
-	ethash_io_mutable_name(AQUAHASH_REVISION, &seedhash, mutable_name);
-	char* tmpfile = ethash_io_create_filename(dirname, mutable_name, strlen(mutable_name));
+	aquahash_io_mutable_name(AQUAHASH_REVISION, &seedhash, mutable_name);
+	char* tmpfile = aquahash_io_create_filename(dirname, mutable_name, strlen(mutable_name));
 	if (!tmpfile) {
 		AQUAHASH_CRITICAL("Could not create the full DAG pathname");
 		goto end;
@@ -52,10 +52,10 @@ enum ethash_io_rc ethash_io_prepare(
 	FILE *f;
 	if (!force_create) {
 		// try to open the file
-		f = ethash_fopen(tmpfile, "rb+");
+		f = aquahash_fopen(tmpfile, "rb+");
 		if (f) {
 			size_t found_size;
-			if (!ethash_file_size(f, &found_size)) {
+			if (!aquahash_file_size(f, &found_size)) {
 				fclose(f);
 				AQUAHASH_CRITICAL("Could not query size of DAG file: \"%s\"", tmpfile);
 				goto free_memo;
@@ -85,7 +85,7 @@ enum ethash_io_rc ethash_io_prepare(
 	}
 	
 	// file does not exist, will need to be created
-	f = ethash_fopen(tmpfile, "wb+");
+	f = aquahash_fopen(tmpfile, "wb+");
 	if (!f) {
 		AQUAHASH_CRITICAL("Could not create DAG file: \"%s\"", tmpfile);
 		goto free_memo;

@@ -29,28 +29,28 @@
 #include <stdlib.h>
 #include <pwd.h>
 
-FILE* ethash_fopen(char const* file_name, char const* mode)
+FILE* aquahash_fopen(char const* file_name, char const* mode)
 {
 	return fopen(file_name, mode);
 }
 
-char* ethash_strncat(char* dest, size_t dest_size, char const* src, size_t count)
+char* aquahash_strncat(char* dest, size_t dest_size, char const* src, size_t count)
 {
 	return strlen(dest) + count + 1 <= dest_size ? strncat(dest, src, count) : NULL;
 }
 
-bool ethash_mkdir(char const* dirname)
+bool aquahash_mkdir(char const* dirname)
 {
 	int rc = mkdir(dirname, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	return rc != -1 || errno == EEXIST;
 }
 
-int ethash_fileno(FILE *f)
+int aquahash_fileno(FILE *f)
 {
 	return fileno(f);
 }
 
-char* ethash_io_create_filename(
+char* aquahash_io_create_filename(
 	char const* dirname,
 	char const* filename,
 	size_t filename_length
@@ -67,15 +67,15 @@ char* ethash_io_create_filename(
 	}
 
 	name[0] = '\0';
-	ethash_strncat(name, dest_size, dirname, dirlen);
+	aquahash_strncat(name, dest_size, dirname, dirlen);
 	if (dirname[dirlen] != '/') {
-		ethash_strncat(name, dest_size, "/", 1);
+		aquahash_strncat(name, dest_size, "/", 1);
 	}
-	ethash_strncat(name, dest_size, filename, filename_length);
+	aquahash_strncat(name, dest_size, filename, filename_length);
 	return name;
 }
 
-bool ethash_file_size(FILE* f, size_t* ret_size)
+bool aquahash_file_size(FILE* f, size_t* ret_size)
 {
 	struct stat st;
 	int fd;
@@ -86,7 +86,7 @@ bool ethash_file_size(FILE* f, size_t* ret_size)
 	return true;
 }
 
-bool ethash_get_default_dirname(char* strbuf, size_t buffsize)
+bool aquahash_get_default_dirname(char* strbuf, size_t buffsize)
 {
 	static const char dir_suffix[] = ".aquahash/";
 	strbuf[0] = '\0';
@@ -99,13 +99,13 @@ bool ethash_get_default_dirname(char* strbuf, size_t buffsize)
 	}
 	
 	size_t len = strlen(home_dir);
-	if (!ethash_strncat(strbuf, buffsize, home_dir, len)) {
+	if (!aquahash_strncat(strbuf, buffsize, home_dir, len)) {
 		return false;
 	}
 	if (home_dir[len] != '/') {
-		if (!ethash_strncat(strbuf, buffsize, "/", 1)) {
+		if (!aquahash_strncat(strbuf, buffsize, "/", 1)) {
 			return false;
 		}
 	}
-	return ethash_strncat(strbuf, buffsize, dir_suffix, sizeof(dir_suffix));
+	return aquahash_strncat(strbuf, buffsize, dir_suffix, sizeof(dir_suffix));
 }

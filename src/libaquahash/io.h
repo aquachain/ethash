@@ -40,8 +40,8 @@ extern "C" {
 // the seedhash and last 1 is for the null terminating character
 // Reference: https://github.com/aquanetwork/wiki/wiki/Aquahash-DAG
 #define DAG_MUTABLE_NAME_MAX_SIZE (6 + 10 + 1 + 16 + 1)
-/// Possible return values of @see ethash_io_prepare
-enum ethash_io_rc {
+/// Possible return values of @see aquahash_io_prepare
+enum aquahash_io_rc {
 	AQUAHASH_IO_FAIL = 0,           ///< There has been an IO failure
 	AQUAHASH_IO_MEMO_SIZE_MISMATCH, ///< DAG with revision/hash match, but file size was wrong.
 	AQUAHASH_IO_MEMO_MISMATCH,      ///< The DAG file did not exist or there was revision/hash mismatch
@@ -57,7 +57,7 @@ enum ethash_io_rc {
 /**
  * Logs a critical error in important parts of aquahash. Should mostly help
  * figure out what kind of problem (I/O, memory e.t.c.) causes a NULL
- * ethash_full_t
+ * aquahash_full_t
  */
 #ifdef AQUAHASH_PRINT_CRITICAL_OUTPUT
 #define AQUAHASH_CRITICAL(...)							\
@@ -89,11 +89,11 @@ enum ethash_io_rc {
  * @param[in] file_size      The size that the DAG file should have on disk
  * @param[out] force_create  If true then there is no check to see if the file
  *                           already exists
- * @return                   For possible return values @see enum ethash_io_rc
+ * @return                   For possible return values @see enum aquahash_io_rc
  */
-enum ethash_io_rc ethash_io_prepare(
+enum aquahash_io_rc aquahash_io_prepare(
 	char const* dirname,
-	ethash_h256_t const seedhash,
+	aquahash_h256_t const seedhash,
 	FILE** output_file,
 	uint64_t file_size,
 	bool force_create
@@ -111,7 +111,7 @@ enum ethash_io_rc ethash_io_prepare(
  * @param mode             Opening mode. Check fopen()
  * @return                 The FILE* or NULL in failure
  */
-FILE* ethash_fopen(char const* file_name, char const* mode);
+FILE* aquahash_fopen(char const* file_name, char const* mode);
 
 /**
  * An strncat wrapper for no-warnings crossplatform strncat.
@@ -129,7 +129,7 @@ FILE* ethash_fopen(char const* file_name, char const* mode);
  * @return                 If all is well returns the dest buffer. If there is an
  *                         error returns NULL
  */
-char* ethash_strncat(char* dest, size_t dest_size, char const* src, size_t count);
+char* aquahash_strncat(char* dest, size_t dest_size, char const* src, size_t count);
 
 /**
  * A cross-platform mkdir wrapper to create a directory or assert it's there
@@ -138,7 +138,7 @@ char* ethash_strncat(char* dest, size_t dest_size, char const* src, size_t count
  * @return               true if the directory was created or if it already
  *                       existed
  */
-bool ethash_mkdir(char const* dirname);
+bool aquahash_mkdir(char const* dirname);
 
 /**
  * Get a file's size
@@ -147,7 +147,7 @@ bool ethash_mkdir(char const* dirname);
  * @param[out] size    Pass a size_t by reference to contain the file size
  * @return             true in success and false if there was a failure
  */
-bool ethash_file_size(FILE* f, size_t* ret_size);
+bool aquahash_file_size(FILE* f, size_t* ret_size);
 
 /**
  * Get a file descriptor number from a FILE stream
@@ -155,7 +155,7 @@ bool ethash_file_size(FILE* f, size_t* ret_size);
  * @param f            The file stream whose fd to get
  * @return             Platform specific fd handler
  */
-int ethash_fileno(FILE* f);
+int aquahash_fileno(FILE* f);
 
 /**
  * Create the filename for the DAG.
@@ -166,7 +166,7 @@ int ethash_fileno(FILE* f);
  * @param filename_length    The length of the filename in bytes
  * @return                   A char* containing the full name. User must deallocate.
  */
-char* ethash_io_create_filename(
+char* aquahash_io_create_filename(
 	char const* dirname,
 	char const* filename,
 	size_t filename_length
@@ -182,17 +182,17 @@ char* ethash_io_create_filename(
  * @param[in]  buffsize        Size of @a strbuf in bytes
  * @return                     true for success and false otherwise
  */
-bool ethash_get_default_dirname(char* strbuf, size_t buffsize);
+bool aquahash_get_default_dirname(char* strbuf, size_t buffsize);
 
-static inline bool ethash_io_mutable_name(
+static inline bool aquahash_io_mutable_name(
 	uint32_t revision,
-	ethash_h256_t const* seed_hash,
+	aquahash_h256_t const* seed_hash,
 	char* output
 )
 {
     uint64_t hash = *((uint64_t*)seed_hash);
 #if LITTLE_ENDIAN == BYTE_ORDER
-    hash = ethash_swap_u64(hash);
+    hash = aquahash_swap_u64(hash);
 #endif
     return snprintf(output, DAG_MUTABLE_NAME_MAX_SIZE, "full-R%u-%016" PRIx64, revision, hash) >= 0;
 }

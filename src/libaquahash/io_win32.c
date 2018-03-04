@@ -27,29 +27,29 @@
 #include <sys/types.h>
 #include <shlobj.h>
 
-FILE* ethash_fopen(char const* file_name, char const* mode)
+FILE* aquahash_fopen(char const* file_name, char const* mode)
 {
 	FILE* f;
 	return fopen_s(&f, file_name, mode) == 0 ? f : NULL;
 }
 
-char* ethash_strncat(char* dest, size_t dest_size, char const* src, size_t count)
+char* aquahash_strncat(char* dest, size_t dest_size, char const* src, size_t count)
 {
 	return strncat_s(dest, dest_size, src, count) == 0 ? dest : NULL;
 }
 
-bool ethash_mkdir(char const* dirname)
+bool aquahash_mkdir(char const* dirname)
 {
 	int rc = _mkdir(dirname);
 	return rc != -1 || errno == EEXIST;
 }
 
-int ethash_fileno(FILE* f)
+int aquahash_fileno(FILE* f)
 {
 	return _fileno(f);
 }
 
-char* ethash_io_create_filename(
+char* aquahash_io_create_filename(
 	char const* dirname,
 	char const* filename,
 	size_t filename_length
@@ -66,15 +66,15 @@ char* ethash_io_create_filename(
 	}
 
 	name[0] = '\0';
-	ethash_strncat(name, dest_size, dirname, dirlen);
+	aquahash_strncat(name, dest_size, dirname, dirlen);
 	if (dirname[dirlen] != '\\' || dirname[dirlen] != '/') {
-		ethash_strncat(name, dest_size, "\\", 1);
+		aquahash_strncat(name, dest_size, "\\", 1);
 	}
-	ethash_strncat(name, dest_size, filename, filename_length);
+	aquahash_strncat(name, dest_size, filename, filename_length);
 	return name;
 }
 
-bool ethash_file_size(FILE* f, size_t* ret_size)
+bool aquahash_file_size(FILE* f, size_t* ret_size)
 {
 	struct _stat st;
 	int fd;
@@ -85,16 +85,16 @@ bool ethash_file_size(FILE* f, size_t* ret_size)
 	return true;
 }
 
-bool ethash_get_default_dirname(char* strbuf, size_t buffsize)
+bool aquahash_get_default_dirname(char* strbuf, size_t buffsize)
 {
 	static const char dir_suffix[] = "Aquahash\\";
 	strbuf[0] = '\0';
 	if (!SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, (CHAR*)strbuf))) {
 		return false;
 	}
-	if (!ethash_strncat(strbuf, buffsize, "\\", 1)) {
+	if (!aquahash_strncat(strbuf, buffsize, "\\", 1)) {
 		return false;
 	}
 
-	return ethash_strncat(strbuf, buffsize, dir_suffix, sizeof(dir_suffix));
+	return aquahash_strncat(strbuf, buffsize, dir_suffix, sizeof(dir_suffix));
 }

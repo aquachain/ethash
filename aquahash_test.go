@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package ethash
+package aquahash
 
 import (
 	"bytes"
@@ -85,7 +85,7 @@ var invalidZeroDiffBlock = testBlock{
 	mixDigest:   crypto.Sha3Hash([]byte("bar")),
 }
 
-func TestEthashVerifyValid(t *testing.T) {
+func TestAquahashVerifyValid(t *testing.T) {
 	eth := New()
 	for i, block := range validBlocks {
 		if !eth.Verify(block) {
@@ -94,14 +94,14 @@ func TestEthashVerifyValid(t *testing.T) {
 	}
 }
 
-func TestEthashVerifyInvalid(t *testing.T) {
+func TestAquahashVerifyInvalid(t *testing.T) {
 	eth := New()
 	if eth.Verify(&invalidZeroDiffBlock) {
 		t.Errorf("should not validate - we just ensure it does not panic on this block")
 	}
 }
 
-func TestEthashConcurrentVerify(t *testing.T) {
+func TestAquahashConcurrentVerify(t *testing.T) {
 	eth, err := NewForTesting()
 	if err != nil {
 		t.Fatal(err)
@@ -127,7 +127,7 @@ func TestEthashConcurrentVerify(t *testing.T) {
 	wg.Wait()
 }
 
-func TestEthashConcurrentSearch(t *testing.T) {
+func TestAquahashConcurrentSearch(t *testing.T) {
 	eth, err := NewForTesting()
 	if err != nil {
 		t.Fatal(err)
@@ -174,7 +174,7 @@ func TestEthashConcurrentSearch(t *testing.T) {
 	}
 }
 
-func TestEthashSearchAcrossEpoch(t *testing.T) {
+func TestAquahashSearchAcrossEpoch(t *testing.T) {
 	eth, err := NewForTesting()
 	if err != nil {
 		t.Fatal(err)
@@ -207,7 +207,7 @@ func TestGetSeedHash(t *testing.T) {
 	}
 
 	// From python:
-	// > from pyethash import get_seedhash
+	// > from pyaquahash import get_seedhash
 	// > get_seedhash(30000)
 	expectedSeed1, err := hex.DecodeString("290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563")
 	if err != nil {

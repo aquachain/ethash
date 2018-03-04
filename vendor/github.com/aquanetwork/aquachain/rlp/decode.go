@@ -1,18 +1,18 @@
-// Copyright 2014 The aquachain Authors
-// This file is part of the aquachain library.
+// Copyright 2014 The go-ethereum Authors
+// This file is part of the go-ethereum library.
 //
-// The aquachain library is free software: you can redistribute it and/or modify
+// The go-ethereum library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The aquachain library is distributed in the hope that it will be useful,
+// The go-ethereum library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the aquachain library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
 package rlp
 
@@ -55,7 +55,7 @@ type Decoder interface {
 // To decode into a pointer, Decode will decode into the value pointed
 // to. If the pointer is nil, a new value of the pointer's element
 // type is allocated. If the pointer is non-nil, the existing value
-// will be reused.
+// will reused.
 //
 // To decode into a struct, Decode expects the input to be an RLP
 // list. The decoded elements of the list are assigned to each public
@@ -290,7 +290,7 @@ func makeListDecoder(typ reflect.Type, tag tags) (decoder, error) {
 		}
 	case tag.tail:
 		// A slice with "tail" tag can occur as the last field
-		// of a struct and is supposed to swallow all remaining
+		// of a struct and is upposed to swallow all remaining
 		// list elements. The struct decoder already called s.List,
 		// proceed directly to decoding the elements.
 		dec = func(s *Stream, val reflect.Value) error {
@@ -693,7 +693,7 @@ func (s *Stream) Raw() ([]byte, error) {
 		return nil, err
 	}
 	if kind == String {
-		puthead(buf, 0x80, 0xB7, size)
+		puthead(buf, 0x80, 0xB8, size)
 	} else {
 		puthead(buf, 0xC0, 0xF7, size)
 	}
@@ -741,7 +741,7 @@ func (s *Stream) uint(maxbits int) (uint64, error) {
 }
 
 // Bool reads an RLP string of up to 1 byte and returns its contents
-// as a boolean. If the input does not contain an RLP string, the
+// as an boolean. If the input does not contain an RLP string, the
 // returned error will be ErrExpectedString.
 func (s *Stream) Bool() (bool, error) {
 	num, err := s.uint(8)

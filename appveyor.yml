@@ -1,7 +1,7 @@
 version: 1.0.0.{build}
 
 environment:
-    BOOST_ROOT: "c:/projects/ethash/deps/boost"
+    BOOST_ROOT: "c:/projects/aquahash/deps/boost"
 
 branches:
     only:
@@ -10,7 +10,7 @@ branches:
 
 os: Windows Server 2012 R2
 
-clone_folder: c:\projects\ethash
+clone_folder: c:\projects\aquahash
 
 #platform: Any CPU
 #configuration: Debug
@@ -21,15 +21,15 @@ install:
 # scripts to run before build
 before_build:
     - echo "Downloading boost..."
-    - mkdir c:\projects\ethash\deps
-    - cd c:\projects\ethash\deps
+    - mkdir c:\projects\aquahash\deps
+    - cd c:\projects\aquahash\deps
     - curl -O https://build.ethdev.com/builds/windows-precompiled/boost.tar.gz
     - echo "Unzipping boost..."
     - 7z x boost.tar.gz > nul
     - 7z x boost.tar > nul
     - ls
     - echo "Running cmake..."
-    - cd c:\projects\ethash
+    - cd c:\projects\aquahash
     - cmake .
 
 build:
@@ -37,7 +37,7 @@ build:
 
 after_build:
     - echo "Running tests..."
-    - cd c:\projects\ethash\test\c\Debug
+    - cd c:\projects\aquahash\test\c\Debug
     - Test.exe
     - echo "Finished!"
 

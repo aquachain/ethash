@@ -30,7 +30,7 @@ endif()
 if (OpenCL_FOUND)
   add_definitions(-DWITH_OPENCL)
   include_directories(${OpenCL_INCLUDE_DIRS})
-  list(APPEND FILES ethash_cl_miner.cpp ethash_cl_miner.h)
+  list(APPEND FILES aquahash_cl_miner.cpp aquahash_cl_miner.h)
 endif()
 
 if (MPI_FOUND)
@@ -53,6 +53,6 @@ target_link_libraries (Benchmark_LIGHT ${ETHHASH_LIBS} ${CMAKE_THREAD_LIBS_INIT}
 
 if (OpenCL_FOUND)
   add_executable (Benchmark_CL benchmark.cpp)
-  target_link_libraries (Benchmark_CL ${ETHHASH_LIBS} ethash-cl ${CMAKE_THREAD_LIBS_INIT})
+  target_link_libraries (Benchmark_CL ${ETHHASH_LIBS} aquahash-cl ${CMAKE_THREAD_LIBS_INIT})
   SET_TARGET_PROPERTIES(Benchmark_CL PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DOPENCL")
 endif()

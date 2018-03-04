@@ -3,67 +3,48 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "ps1CBgUd7Bqnxf34s1ucUvgDCbI=",
-			"path": "github.com/aquanetwork/aquachain/common",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
-		},
-		{
-			"checksumSHA1": "Zz3F3+dfooLcw4IjbyseOD+/g70=",
-			"path": "github.com/aquanetwork/aquachain/common/hexutil",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
-		},
-		{
-			"checksumSHA1": "GyZBU74Sjuu90kVuXbARkXUF45o=",
-			"path": "github.com/aquanetwork/aquachain/common/math",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
-		},
-		{
-			"checksumSHA1": "AuiMSnI5GeDWrV0JY5SHaAr2N8Y=",
-			"path": "github.com/aquanetwork/aquachain/crypto",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
-		},
-		{
-			"checksumSHA1": "nj8djgbUraXyNMMGLqXBRxcxqqs=",
-			"path": "github.com/aquanetwork/aquachain/crypto/secp256k1",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
-		},
-		{
-			"checksumSHA1": "gIDhQ4MLghuoz5pIQOBTxNenRe4=",
-			"path": "github.com/aquanetwork/aquachain/crypto/sha3",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
-		},
-		{
-			"checksumSHA1": "hrcKKeIfVEGU5vzzFEZ2/NNeEiw=",
-			"path": "github.com/aquanetwork/aquachain/log",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
-		},
-		{
-			"checksumSHA1": "nRSiF9YMnC7jspreakvQP+/AsVY=",
-			"path": "github.com/aquanetwork/aquachain/rlp",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
-		},
-		{
-			"checksumSHA1": "SkKyCefhjiRFXvNsDQoZNH68Nis=",
-			"origin": "github.com/aquanetwork/aquachain/vendor/github.com/btcsuite/btcd/btcec",
+			"checksumSHA1": "Eu4iBa1TK3Y5ZQkP4RUi0XTw6tY=",
 			"path": "github.com/btcsuite/btcd/btcec",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
+			"revision": "4b348c1d33373d672edd83fc576892d0e46686d2",
+			"revisionTime": "2017-03-22T18:48:02Z"
 		},
 		{
-			"checksumSHA1": "8wPrKXyNlGxD1GmetmFB11fGo+o=",
-			"origin": "github.com/aquanetwork/aquachain/vendor/github.com/go-stack/stack",
+			"checksumSHA1": "exEIOkzQrq9M+59RLaXEwhDxGUo=",
+			"path": "github.com/aquanetwork/aquachain/crypto",
+			"revision": "cc13d576f07fb6803e09fb42880591a67b8b0ef6",
+			"revisionTime": "2017-04-07T08:03:11Z"
+		},
+		{
+			"checksumSHA1": "TMVztwYLcQlIio/kEqbF8TQYWYg=",
+			"path": "github.com/aquanetwork/aquachain/crypto/secp256k1",
+			"revision": "cc13d576f07fb6803e09fb42880591a67b8b0ef6",
+			"revisionTime": "2017-04-07T08:03:11Z",
+			"tree": true
+		},
+		{
+			"checksumSHA1": "yunX3AjO6JiMz0NSY/krvG3VWsk=",
+			"path": "github.com/aquanetwork/aquachain/crypto/sha3",
+			"revision": "cc13d576f07fb6803e09fb42880591a67b8b0ef6",
+			"revisionTime": "2017-04-07T08:03:11Z"
+		},
+		{
+			"checksumSHA1": "NbRntdNRuwam0wGGNJ6HrR83P0M=",
+			"path": "github.com/aquanetwork/aquachain/log",
+			"revision": "cc13d576f07fb6803e09fb42880591a67b8b0ef6",
+			"revisionTime": "2017-04-07T08:03:11Z"
+		},
+		{
+			"checksumSHA1": "ERaBPyDJCbMQRJsR6Kpqkr7dqfg=",
+			"path": "github.com/aquanetwork/aquachain/rlp",
+			"revision": "cc13d576f07fb6803e09fb42880591a67b8b0ef6",
+			"revisionTime": "2017-04-07T08:03:11Z"
+		},
+		{
+			"checksumSHA1": "2sj/DbXoXdnPAfjAEyhS0Jj5QL0=",
 			"path": "github.com/go-stack/stack",
-			"revision": "62304ebd0aaa8909b3a257e8017ab474837a678c",
-			"revisionTime": "2018-03-04T05:40:19Z"
+			"revision": "100eb0c0a9c5b306ca2fb4f165df21d80ada4b82",
+			"revisionTime": "2016-05-14T03:44:11Z"
 		}
 	],
-	"rootPath": "github.com/aquanetwork/aquahash"
+	"rootPath": "github.com/ethereum/ethash"
 }

@@ -3,45 +3,45 @@ import os
 from distutils.core import setup, Extension
 sources = [
     'src/python/core.c',
-    'src/libethash/io.c',
-    'src/libethash/internal.c',
-    'src/libethash/sha3.c']
+    'src/libaquahash/io.c',
+    'src/libaquahash/internal.c',
+    'src/libaquahash/sha3.c']
 if os.name == 'nt':
     sources += [
-        'src/libethash/util_win32.c',
-        'src/libethash/io_win32.c',
-        'src/libethash/mmap_win32.c',
+        'src/libaquahash/util_win32.c',
+        'src/libaquahash/io_win32.c',
+        'src/libaquahash/mmap_win32.c',
     ]
 else:
     sources += [
-        'src/libethash/io_posix.c'
+        'src/libaquahash/io_posix.c'
     ]
 depends = [
-    'src/libethash/ethash.h',
-    'src/libethash/compiler.h',
-    'src/libethash/data_sizes.h',
-    'src/libethash/endian.h',
-    'src/libethash/ethash.h',
-    'src/libethash/io.h',
-    'src/libethash/fnv.h',
-    'src/libethash/internal.h',
-    'src/libethash/sha3.h',
-    'src/libethash/util.h',
+    'src/libaquahash/aquahash.h',
+    'src/libaquahash/compiler.h',
+    'src/libaquahash/data_sizes.h',
+    'src/libaquahash/endian.h',
+    'src/libaquahash/aquahash.h',
+    'src/libaquahash/io.h',
+    'src/libaquahash/fnv.h',
+    'src/libaquahash/internal.h',
+    'src/libaquahash/sha3.h',
+    'src/libaquahash/util.h',
 ]
-pyethash = Extension('pyethash',
+pyaquahash = Extension('pyaquahash',
                      sources=sources,
                      depends=depends,
                      extra_compile_args=["-Isrc/", "-std=gnu99", "-Wall"])
 
 setup(
-    name='pyethash',
+    name='pyaquahash',
     author="Matthew Wampler-Doty",
     author_email="matthew.wampler.doty@gmail.com",
     license='GPL',
     version='0.1.23',
-    url='https://github.com/ethereum/ethash',
-    download_url='https://github.com/ethereum/ethash/tarball/v23',
-    description=('Python wrappers for ethash, the ethereum proof of work'
+    url='https://github.com/ethereum/aquahash',
+    download_url='https://github.com/ethereum/aquahash/tarball/v23',
+    description=('Python wrappers for aquahash, the ethereum proof of work'
                  'hashing function'),
-    ext_modules=[pyethash],
+    ext_modules=[pyaquahash],
 )

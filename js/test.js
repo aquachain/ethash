@@ -4,7 +4,7 @@
 /*jslint node: true, shadow:true */
 "use strict";
 
-var ethash = require('./ethash');
+var aquahash = require('./aquahash');
 var util = require('./util');
 var Keccak = require('./keccak');
 
@@ -24,15 +24,15 @@ if (util.wordsToHexString(dst) != "0eab42de4c3ceb9235fc91acffe746b29c29a8c366b7c
 
 
 // init params
-var ethashParams = ethash.defaultParams();
-//ethashParams.cacheRounds = 0;
+var aquahashParams = aquahash.defaultParams();
+//aquahashParams.cacheRounds = 0;
 
 // create hasher
 var seed = util.hexStringToBytes("9410b944535a83d9adf6bbdcc80e051f30676173c16ca0d32d6f1263fc246466")
 var startTime = new Date().getTime();
-var hasher = new ethash.Ethash(ethashParams, seed);
-console.log('Ethash startup took: '+(new Date().getTime() - startTime) + "ms");
-console.log('Ethash cache hash: ' + util.bytesToHexString(hasher.cacheDigest()));
+var hasher = new aquahash.Aquahash(aquahashParams, seed);
+console.log('Aquahash startup took: '+(new Date().getTime() - startTime) + "ms");
+console.log('Aquahash cache hash: ' + util.bytesToHexString(hasher.cacheDigest()));
 
 var testHexString = "c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470";
 if (testHexString != util.bytesToHexString(util.hexStringToBytes(testHexString)))

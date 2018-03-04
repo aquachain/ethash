@@ -1,17 +1,17 @@
 include setup.py
 
 # C sources
-include src/libethash/internal.c
-include src/libethash/sha3.c
-include src/libethash/util.c
+include src/libaquahash/internal.c
+include src/libaquahash/sha3.c
+include src/libaquahash/util.c
 include src/python/core.c
 
 # Headers
-include src/libethash/compiler.h
-include src/libethash/data_sizes.h
-include src/libethash/endian.h
-include src/libethash/ethash.h
-include src/libethash/fnv.h
-include src/libethash/internal.h
-include src/libethash/sha3.h
-include src/libethash/util.h
+include src/libaquahash/compiler.h
+include src/libaquahash/data_sizes.h
+include src/libaquahash/endian.h
+include src/libaquahash/aquahash.h
+include src/libaquahash/fnv.h
+include src/libaquahash/internal.h
+include src/libaquahash/sha3.h
+include src/libaquahash/util.h

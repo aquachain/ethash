@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package ethash
+package aquahash
 
 /*
  -mno-stack-arg-probe disables stack probing which avoids the function
@@ -32,20 +32,20 @@ package ethash
 #cgo windows CFLAGS: -mno-stack-arg-probe
 #cgo LDFLAGS: -lm
 
-#include "src/libethash/internal.c"
-#include "src/libethash/sha3.c"
-#include "src/libethash/io.c"
+#include "src/libaquahash/internal.c"
+#include "src/libaquahash/sha3.c"
+#include "src/libaquahash/io.c"
 
 #ifdef _WIN32
-#	include "src/libethash/io_win32.c"
-#	include "src/libethash/mmap_win32.c"
+#	include "src/libaquahash/io_win32.c"
+#	include "src/libaquahash/mmap_win32.c"
 #else
-#	include "src/libethash/io_posix.c"
+#	include "src/libaquahash/io_posix.c"
 #endif
 
 // 'gateway function' for calling back into go.
-extern int ethashGoCallback(unsigned);
-int ethashGoCallback_cgo(unsigned percent) { return ethashGoCallback(percent); }
+extern int aquahashGoCallback(unsigned);
+int aquahashGoCallback_cgo(unsigned percent) { return aquahashGoCallback(percent); }
 
 */
 import "C"

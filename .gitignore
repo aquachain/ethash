@@ -4,7 +4,7 @@
 .vagrant/
 *.pyc
 build/
-pyethash.egg-info/
+pyaquahash.egg-info/
 *.so
 *~
 *.swp

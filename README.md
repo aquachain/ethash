@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/ethereum/ethash.svg?branch=master)](https://travis-ci.org/ethereum/ethash)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/debris/ethash?branch=master&svg=true)](https://ci.appveyor.com/project/debris/ethash-nr37r/branch/master)
+[![Build Status](https://travis-ci.org/ethereum/aquahash.svg?branch=master)](https://travis-ci.org/ethereum/aquahash)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/debris/aquahash?branch=master&svg=true)](https://ci.appveyor.com/project/debris/aquahash-nr37r/branch/master)
 
-# Ethash
+# Aquahash
 
 For details on this project, please see the Ethereum wiki:
-https://github.com/ethereum/wiki/wiki/Ethash
+https://github.com/ethereum/wiki/wiki/Aquahash
 
 ### Coding Style for C++ code:
 
