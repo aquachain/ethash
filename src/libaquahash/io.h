@@ -1,18 +1,18 @@
 /*
-  This file is part of ethash.
+  This file is part of aquahash.
 
-  ethash is free software: you can redistribute it and/or modify
+  aquahash is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  ethash is distributed in the hope that it will be useful,
+  aquahash is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with ethash.  If not, see <http://www.gnu.org/licenses/>.
+  along with aquahash.  If not, see <http://www.gnu.org/licenses/>.
 */
 /** @file io.h
  * @author Lefteris Karapetsas <lefteris@ethdev.com>
@@ -28,7 +28,7 @@
 #endif
 #include <inttypes.h>
 #include "endian.h"
-#include "ethash.h"
+#include "aquahash.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,14 +38,14 @@ extern "C" {
 // 10 is for maximum number of digits of a uint32_t (for REVISION)
 // 1 is for - and 16 is for the first 16 hex digits for first 8 bytes of
 // the seedhash and last 1 is for the null terminating character
-// Reference: https://github.com/ethereum/wiki/wiki/Ethash-DAG
+// Reference: https://github.com/aquanetwork/wiki/wiki/Aquahash-DAG
 #define DAG_MUTABLE_NAME_MAX_SIZE (6 + 10 + 1 + 16 + 1)
 /// Possible return values of @see ethash_io_prepare
 enum ethash_io_rc {
-	ETHASH_IO_FAIL = 0,           ///< There has been an IO failure
-	ETHASH_IO_MEMO_SIZE_MISMATCH, ///< DAG with revision/hash match, but file size was wrong.
-	ETHASH_IO_MEMO_MISMATCH,      ///< The DAG file did not exist or there was revision/hash mismatch
-	ETHASH_IO_MEMO_MATCH,         ///< DAG file existed and revision/hash matched. No need to do anything
+	AQUAHASH_IO_FAIL = 0,           ///< There has been an IO failure
+	AQUAHASH_IO_MEMO_SIZE_MISMATCH, ///< DAG with revision/hash match, but file size was wrong.
+	AQUAHASH_IO_MEMO_MISMATCH,      ///< The DAG file did not exist or there was revision/hash mismatch
+	AQUAHASH_IO_MEMO_MATCH,         ///< DAG file existed and revision/hash matched. No need to do anything
 };
 
 // small hack for windows. I don't feel I should use va_args and forward just
@@ -55,32 +55,32 @@ enum ethash_io_rc {
 #endif
 
 /**
- * Logs a critical error in important parts of ethash. Should mostly help
+ * Logs a critical error in important parts of aquahash. Should mostly help
  * figure out what kind of problem (I/O, memory e.t.c.) causes a NULL
  * ethash_full_t
  */
-#ifdef ETHASH_PRINT_CRITICAL_OUTPUT
-#define ETHASH_CRITICAL(...)							\
+#ifdef AQUAHASH_PRINT_CRITICAL_OUTPUT
+#define AQUAHASH_CRITICAL(...)							\
 	do													\
 	{													\
-		printf("ETHASH CRITICAL ERROR: "__VA_ARGS__);	\
+		printf("AQUAHASH CRITICAL ERROR: "__VA_ARGS__);	\
 		printf("\n");									\
 		fflush(stdout);									\
 	} while (0)
 #else
-#define ETHASH_CRITICAL(...)          
+#define AQUAHASH_CRITICAL(...)          
 #endif
 
 /**
- * Prepares io for ethash
+ * Prepares io for aquahash
  *
  * Create the DAG directory and the DAG file if they don't exist.
  *
- * @param[in] dirname        A null terminated c-string of the path of the ethash
+ * @param[in] dirname        A null terminated c-string of the path of the aquahash
  *                           data directory. If it does not exist it's created.
  * @param[in] seedhash       The seedhash of the current block number, used in the
  *                           naming of the file as can be seen from the spec at:
- *                           https://github.com/ethereum/wiki/wiki/Ethash-DAG
+ *                           https://github.com/aquanetwork/wiki/wiki/Aquahash-DAG
  * @param[out] output_file   If there was no failure then this will point to an open
  *                           file descriptor. User is responsible for closing it.
  *                           In the case of memo match then the file is open on read
@@ -175,7 +175,7 @@ char* ethash_io_create_filename(
 /**
  * Gets the default directory name for the DAG depending on the system
  *
- * The spec defining this directory is here: https://github.com/ethereum/wiki/wiki/Ethash-DAG
+ * The spec defining this directory is here: https://github.com/aquanetwork/wiki/wiki/Aquahash-DAG
  *
  * @param[out] strbuf          A string buffer of sufficient size to keep the
  *                             null termninated string of the directory name

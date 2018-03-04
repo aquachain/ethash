@@ -1,7 +1,7 @@
 #pragma once
 #include "compiler.h"
 #include "endian.h"
-#include "ethash.h"
+#include "aquahash.h"
 #include <stdio.h>
 
 #define ENABLE_SSE 0
@@ -16,7 +16,7 @@ extern "C" {
 
 // compile time settings
 #define NODE_WORDS (64/4)
-#define MIX_WORDS (ETHASH_MIX_BYTES/4)
+#define MIX_WORDS (AQUAHASH_MIX_BYTES/4)
 #define MIX_NODES (MIX_WORDS / NODE_WORDS)
 #include <stdint.h>
 
@@ -161,7 +161,7 @@ uint64_t ethash_get_cachesize(uint64_t const block_number);
 /**
  * Compute the memory data for a full node's memory
  *
- * @param mem         A pointer to an ethash full's memory
+ * @param mem         A pointer to an aquahash full's memory
  * @param full_size   The size of the full data in bytes
  * @param cache       A cache object to use in the calculation
  * @param callback    The callback function. Check @ref ethash_full_new() for details.

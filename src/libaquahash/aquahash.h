@@ -1,21 +1,21 @@
 /*
-  This file is part of ethash.
+  This file is part of aquahash.
 
-  ethash is free software: you can redistribute it and/or modify
+  aquahash is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  ethash is distributed in the hope that it will be useful,
+  aquahash is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with ethash.  If not, see <http://www.gnu.org/licenses/>.
+  along with aquahash.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/** @file ethash.h
+/** @file aquahash.h
 * @date 2015
 */
 #pragma once
@@ -26,19 +26,19 @@
 #include <stddef.h>
 #include "compiler.h"
 
-#define ETHASH_REVISION 23
-#define ETHASH_DATASET_BYTES_INIT 1073741824U // 2**30
-#define ETHASH_DATASET_BYTES_GROWTH 8388608U  // 2**23
-#define ETHASH_CACHE_BYTES_INIT 1073741824U // 2**24
-#define ETHASH_CACHE_BYTES_GROWTH 131072U  // 2**17
-#define ETHASH_EPOCH_LENGTH 30000U
-#define ETHASH_MIX_BYTES 128
-#define ETHASH_HASH_BYTES 64
-#define ETHASH_DATASET_PARENTS 256
-#define ETHASH_CACHE_ROUNDS 3
-#define ETHASH_ACCESSES 64
-#define ETHASH_DAG_MAGIC_NUM_SIZE 8
-#define ETHASH_DAG_MAGIC_NUM 0xFEE1DEADBADDCAFE
+#define AQUAHASH_REVISION 23
+#define AQUAHASH_DATASET_BYTES_INIT 1073741824U // 2**30
+#define AQUAHASH_DATASET_BYTES_GROWTH 8388608U  // 2**23
+#define AQUAHASH_CACHE_BYTES_INIT 1073741824U // 2**24
+#define AQUAHASH_CACHE_BYTES_GROWTH 131072U  // 2**17
+#define AQUAHASH_EPOCH_LENGTH 30000U
+#define AQUAHASH_MIX_BYTES 128
+#define AQUAHASH_HASH_BYTES 64
+#define AQUAHASH_DATASET_PARENTS 256
+#define AQUAHASH_CACHE_ROUNDS 3
+#define AQUAHASH_ACCESSES 64
+#define AQUAHASH_DAG_MAGIC_NUM_SIZE 8
+#define AQUAHASH_DAG_MAGIC_NUM 0xFEE1DEADBADDCAFE
 
 #ifdef __cplusplus
 extern "C" {

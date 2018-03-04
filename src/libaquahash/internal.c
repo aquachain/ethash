@@ -1,18 +1,18 @@
 /*
-  This file is part of ethash.
+  This file is part of aquahash.
 
-  ethash is free software: you can redistribute it and/or modify
+  aquahash is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  ethash is distributed in the hope that it will be useful,
+  aquahash is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with cpp-ethereum.	If not, see <http://www.gnu.org/licenses/>.
+  along with cpp-aquachain.	If not, see <http://www.gnu.org/licenses/>.
 */
 /** @file internal.c
 * @author Tim Hughes <tim@twistedfury.com>
@@ -26,7 +26,7 @@
 #include <errno.h>
 #include <math.h>
 #include "mmap.h"
-#include "ethash.h"
+#include "aquahash.h"
 #include "fnv.h"
 #include "endian.h"
 #include "internal.h"
@@ -43,14 +43,14 @@
 
 uint64_t ethash_get_datasize(uint64_t const block_number)
 {
-	assert(block_number / ETHASH_EPOCH_LENGTH < 2048);
-	return dag_sizes[block_number / ETHASH_EPOCH_LENGTH];
+	assert(block_number / AQUAHASH_EPOCH_LENGTH < 2048);
+	return dag_sizes[block_number / AQUAHASH_EPOCH_LENGTH];
 }
 
 uint64_t ethash_get_cachesize(uint64_t const block_number)
 {
-	assert(block_number / ETHASH_EPOCH_LENGTH < 2048);
-	return cache_sizes[block_number / ETHASH_EPOCH_LENGTH];
+	assert(block_number / AQUAHASH_EPOCH_LENGTH < 2048);
+	return cache_sizes[block_number / AQUAHASH_EPOCH_LENGTH];
 }
 
 // Follows Sergio's "STRICT MEMORY HARD HASHING FUNCTIONS" (2014)
@@ -73,7 +73,7 @@ bool static ethash_compute_cache_nodes(
 		SHA3_512(nodes[i].bytes, nodes[i - 1].bytes, 64);
 	}
 
-	for (uint32_t j = 0; j != ETHASH_CACHE_ROUNDS; j++) {
+	for (uint32_t j = 0; j != AQUAHASH_CACHE_ROUNDS; j++) {
 		for (uint32_t i = 0; i != num_nodes; i++) {
 			uint32_t const idx = nodes[i].words[0] % num_nodes;
 			node data;
@@ -110,7 +110,7 @@ void ethash_calculate_dag_item(
 	__m128i xmm3 = ret->xmm[3];
 #endif
 
-	for (uint32_t i = 0; i != ETHASH_DATASET_PARENTS; ++i) {
+	for (uint32_t i = 0; i != AQUAHASH_DATASET_PARENTS; ++i) {
 		uint32_t parent_index = fnv_hash(node_index ^ i, ret->words[i % NODE_WORDS]) % num_parent_nodes;
 		node const *parent = &cache_nodes[parent_index];
 
@@ -202,7 +202,7 @@ static bool ethash_hash(
 	unsigned const page_size = sizeof(uint32_t) * MIX_WORDS;
 	unsigned const num_full_pages = (unsigned) (full_size / page_size);
 
-	for (unsigned i = 0; i != ETHASH_ACCESSES; ++i) {
+	for (unsigned i = 0; i != AQUAHASH_ACCESSES; ++i) {
 		uint32_t const index = fnv_hash(s_mix->words[0] ^ i, mix->words[i % MIX_WORDS]) % num_full_pages;
 
 		for (unsigned n = 0; n != MIX_NODES; ++n) {
@@ -274,7 +274,7 @@ ethash_h256_t ethash_get_seedhash(uint64_t block_number)
 {
 	ethash_h256_t ret;
 	ethash_h256_reset(&ret);
-	uint64_t const epochs = block_number / ETHASH_EPOCH_LENGTH;
+	uint64_t const epochs = block_number / AQUAHASH_EPOCH_LENGTH;
 	for (uint32_t i = 0; i < epochs; ++i)
 		SHA3_256(&ret, (uint8_t*)&ret, 32);
 	return ret;
@@ -371,7 +371,7 @@ static bool ethash_mmap(struct ethash_full* ret, FILE* f)
 	}
 	mmapped_data= mmap(
 		NULL,
-		(size_t)ret->file_size + ETHASH_DAG_MAGIC_NUM_SIZE,
+		(size_t)ret->file_size + AQUAHASH_DAG_MAGIC_NUM_SIZE,
 		PROT_READ | PROT_WRITE,
 		MAP_SHARED,
 		fd,
@@ -380,7 +380,7 @@ static bool ethash_mmap(struct ethash_full* ret, FILE* f)
 	if (mmapped_data == MAP_FAILED) {
 		return false;
 	}
-	ret->data = (node*)(mmapped_data + ETHASH_DAG_MAGIC_NUM_SIZE);
+	ret->data = (node*)(mmapped_data + AQUAHASH_DAG_MAGIC_NUM_SIZE);
 	return true;
 }
 
@@ -400,47 +400,47 @@ ethash_full_t ethash_full_new_internal(
 	}
 	ret->file_size = (size_t)full_size;
 	switch (ethash_io_prepare(dirname, seed_hash, &f, (size_t)full_size, false)) {
-	case ETHASH_IO_FAIL:
-		// ethash_io_prepare will do all ETHASH_CRITICAL() logging in fail case
+	case AQUAHASH_IO_FAIL:
+		// ethash_io_prepare will do all AQUAHASH_CRITICAL() logging in fail case
 		goto fail_free_full;
-	case ETHASH_IO_MEMO_MATCH:
+	case AQUAHASH_IO_MEMO_MATCH:
 		if (!ethash_mmap(ret, f)) {
-			ETHASH_CRITICAL("mmap failure()");
+			AQUAHASH_CRITICAL("mmap failure()");
 			goto fail_close_file;
 		}
 		return ret;
-	case ETHASH_IO_MEMO_SIZE_MISMATCH:
+	case AQUAHASH_IO_MEMO_SIZE_MISMATCH:
 		// if a DAG of same filename but unexpected size is found, silently force new file creation
-		if (ethash_io_prepare(dirname, seed_hash, &f, (size_t)full_size, true) != ETHASH_IO_MEMO_MISMATCH) {
-			ETHASH_CRITICAL("Could not recreate DAG file after finding existing DAG with unexpected size.");
+		if (ethash_io_prepare(dirname, seed_hash, &f, (size_t)full_size, true) != AQUAHASH_IO_MEMO_MISMATCH) {
+			AQUAHASH_CRITICAL("Could not recreate DAG file after finding existing DAG with unexpected size.");
 			goto fail_free_full;
 		}
 		// fallthrough to the mismatch case here, DO NOT go through match
-	case ETHASH_IO_MEMO_MISMATCH:
+	case AQUAHASH_IO_MEMO_MISMATCH:
 		if (!ethash_mmap(ret, f)) {
-			ETHASH_CRITICAL("mmap failure()");
+			AQUAHASH_CRITICAL("mmap failure()");
 			goto fail_close_file;
 		}
 		break;
 	}
 
 	if (!ethash_compute_full_data(ret->data, full_size, light, callback)) {
-		ETHASH_CRITICAL("Failure at computing DAG data.");
+		AQUAHASH_CRITICAL("Failure at computing DAG data.");
 		goto fail_free_full_data;
 	}
 
 	// after the DAG has been filled then we finalize it by writting the magic number at the beginning
 	if (fseek(f, 0, SEEK_SET) != 0) {
-		ETHASH_CRITICAL("Could not seek to DAG file start to write magic number.");
+		AQUAHASH_CRITICAL("Could not seek to DAG file start to write magic number.");
 		goto fail_free_full_data;
 	}
-	uint64_t const magic_num = ETHASH_DAG_MAGIC_NUM;
-	if (fwrite(&magic_num, ETHASH_DAG_MAGIC_NUM_SIZE, 1, f) != 1) {
-		ETHASH_CRITICAL("Could not write magic number to DAG's beginning.");
+	uint64_t const magic_num = AQUAHASH_DAG_MAGIC_NUM;
+	if (fwrite(&magic_num, AQUAHASH_DAG_MAGIC_NUM_SIZE, 1, f) != 1) {
+		AQUAHASH_CRITICAL("Could not write magic number to DAG's beginning.");
 		goto fail_free_full_data;
 	}
 	if (fflush(f) != 0) {// make sure the magic number IS there
-		ETHASH_CRITICAL("Could not flush memory mapped data to DAG file. Insufficient space?");
+		AQUAHASH_CRITICAL("Could not flush memory mapped data to DAG file. Insufficient space?");
 		goto fail_free_full_data;
 	}
 	return ret;
