@@ -40,9 +40,9 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/aquanetwork/aquachain/common"
+	"github.com/aquanetwork/aquachain/crypto"
+	"github.com/aquanetwork/aquachain/log"
 )
 
 var (
